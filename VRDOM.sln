@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRDOM", "VRDOM.csproj", "{D520E313-A4E5-4815-81C5-801581B0C76E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D520E313-A4E5-4815-81C5-801581B0C76E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D520E313-A4E5-4815-81C5-801581B0C76E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D520E313-A4E5-4815-81C5-801581B0C76E}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{D520E313-A4E5-4815-81C5-801581B0C76E}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{D520E313-A4E5-4815-81C5-801581B0C76E}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{D520E313-A4E5-4815-81C5-801581B0C76E}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal

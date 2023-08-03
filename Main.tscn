@@ -1,0 +1,144 @@
+[gd_scene load_steps=20 format=3 uid="uid://bq81xxba71cxw"]
+
+[ext_resource type="Script" path="res://scripts/RootInit.cs" id="1_i51wy"]
+[ext_resource type="BoxMesh" uid="uid://c86k0m3ggdn76" path="res://controller.tres" id="2_d3qf6"]
+[ext_resource type="Shader" path="res://shaders/ColorSwap.gdshader" id="2_xru62"]
+[ext_resource type="Script" path="res://scripts/FootSensor.cs" id="3_6061f"]
+[ext_resource type="Script" path="res://scripts/SensorTrigger.cs" id="4_thw0t"]
+[ext_resource type="Shader" path="res://shaders/FootSensor.gdshader" id="4_xuw0l"]
+[ext_resource type="Script" path="res://scripts/GameConnection.cs" id="5_44hhi"]
+[ext_resource type="Shape3D" uid="uid://rd2eoar5f4gj" path="res://controller_collisionshape.tres" id="5_py4o4"]
+[ext_resource type="Script" path="res://scripts/DisplayCapture.cs" id="7_ffs0h"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_j2hdc"]
+size = Vector2(1.77, 1)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_phccb"]
+size = Vector2(1920, 1080)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y0wys"]
+render_priority = 0
+shader = ExtResource("2_xru62")
+shader_parameter/texture_albedo = SubResource("PlaceholderTexture2D_phccb")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1s0mo"]
+size = Vector2(1.28, 1.65)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_41fau"]
+render_priority = 0
+shader = ExtResource("4_xuw0l")
+shader_parameter/led_data = null
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r3gxn"]
+size = Vector3(1.3, 0.08, 1.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_a5ph8"]
+size = Vector3(0.04, 0.045, 0.05)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_cxmum"]
+sky_top_color = Color(0.141176, 0.454902, 0.764706, 1)
+sky_horizon_color = Color(0.901961, 0.65098, 0.678431, 1)
+ground_bottom_color = Color(0.909804, 0.909804, 0.909804, 1)
+
+[sub_resource type="Sky" id="Sky_ifkyq"]
+sky_material = SubResource("ProceduralSkyMaterial_cxmum")
+
+[sub_resource type="Environment" id="Environment_jj1ls"]
+background_mode = 2
+sky = SubResource("Sky_ifkyq")
+ambient_light_source = 3
+ssil_intensity = 3.38
+sdfgi_read_sky_light = false
+glow_enabled = true
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_i51wy")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="Screen" type="CSGMesh3D" parent="XROrigin3D"]
+transform = Transform3D(0.95, 0, 0, 0, -4.37114e-08, -0.95, 0, 1, -4.15258e-08, 0, 1.22575, -1.19404)
+mesh = SubResource("PlaneMesh_j2hdc")
+material = SubResource("ShaderMaterial_y0wys")
+script = ExtResource("7_ffs0h")
+
+[node name="Foot Sensor Pad" type="CSGMesh3D" parent="XROrigin3D" node_paths=PackedStringArray("_gameConnection")]
+gi_mode = 2
+use_collision = true
+collision_layer = 4
+collision_mask = 4
+mesh = SubResource("PlaneMesh_1s0mo")
+material = SubResource("ShaderMaterial_41fau")
+script = ExtResource("3_6061f")
+_gameConnection = NodePath("../../Game Connection")
+
+[node name="Sensor" type="Area3D" parent="XROrigin3D/Foot Sensor Pad"]
+collision_layer = 3
+collision_mask = 2
+
+[node name="MinMarker" type="Marker3D" parent="XROrigin3D/Foot Sensor Pad/Sensor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.64, 0, -0.824933)
+
+[node name="MaxMarker" type="Marker3D" parent="XROrigin3D/Foot Sensor Pad/Sensor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.640241, 0, 0.825155)
+
+[node name="CollisionPolygon3D" type="CollisionShape3D" parent="XROrigin3D/Foot Sensor Pad/Sensor"]
+shape = SubResource("BoxShape3D_r3gxn")
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+
+[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
+tracker = &"left_hand"
+
+[node name="Sensor" type="Area3D" parent="XROrigin3D/LeftHand"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("4_thw0t")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/LeftHand/Sensor"]
+shape = ExtResource("5_py4o4")
+
+[node name="RayCast3D" type="RayCast3D" parent="XROrigin3D/LeftHand/Sensor"]
+collision_mask = 4
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/LeftHand"]
+mesh = ExtResource("2_d3qf6")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="XROrigin3D/LeftHand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0740553, 0)
+mesh = SubResource("BoxMesh_a5ph8")
+
+[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
+tracker = &"right_hand"
+
+[node name="Sensor" type="Area3D" parent="XROrigin3D/RightHand"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("4_thw0t")
+sensorId = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/RightHand/Sensor"]
+shape = ExtResource("5_py4o4")
+
+[node name="RayCast3D" type="RayCast3D" parent="XROrigin3D/RightHand/Sensor"]
+collision_mask = 4
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/RightHand"]
+mesh = ExtResource("2_d3qf6")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="XROrigin3D/RightHand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0740553, 0)
+mesh = SubResource("BoxMesh_a5ph8")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.445432, 0.895316, 0, -0.895316, 0.445432, 0, 5.43573, -0.011737)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_jj1ls")
+
+[node name="Game Connection" type="Node" parent="." node_paths=PackedStringArray("_footSensor")]
+script = ExtResource("5_44hhi")
+_footSensor = NodePath("../XROrigin3D/Foot Sensor Pad")
