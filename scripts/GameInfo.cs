@@ -9,13 +9,15 @@ public enum TouchEvents
 	TOUCH_MOVE = 2,
 }
 
-public class TouchCommand {
+public class TouchCommand
+{
 	public int sensorId;
 	public int touchEvent;
 	public Vector2 touchPosition;
 	public Vector2 touchSize;
 
-	public TouchCommand(int sensorId, int touchEvent, Vector2 touchPosition, Vector2 touchSize) {
+	public TouchCommand(int sensorId, int touchEvent, Vector2 touchPosition, Vector2 touchSize)
+	{
 		this.sensorId = sensorId;
 		this.touchEvent = touchEvent;
 		this.touchPosition = touchPosition;

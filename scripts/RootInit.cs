@@ -7,7 +7,7 @@ public partial class RootInit : Node3D
     public override void _Ready()
     {
         _xrInterface = XRServer.FindInterface("OpenXR");
-        if(_xrInterface != null && _xrInterface.IsInitialized())
+        if (_xrInterface != null && _xrInterface.IsInitialized())
         {
             GD.Print("OpenXR initialized successfully");
 

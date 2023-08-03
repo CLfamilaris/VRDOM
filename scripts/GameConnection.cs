@@ -10,14 +10,14 @@ public partial class GameConnection : Node
     [Export]
     private FootSensor _footSensor;
 
-    private WebSocketPeer wsPeer = new WebSocketPeer();
-    double lightingGetInterval = 0.0166;
+    private WebSocketPeer _wsPeer = new();
+    readonly double lightingGetInterval = 0.0166;
     double lightingGetTimer = 0;
 
     public void getLighting()
     {
-        if (wsPeer.GetReadyState() == WebSocketPeer.State.Open)
-            wsPeer.Send(Encoding.UTF8.GetBytes("{\"id\":0,\"module\":\"drs\",\"function\":\"tapeled_get\",\"params\":[]}"));
+        if (_wsPeer.GetReadyState() == WebSocketPeer.State.Open)
+            _wsPeer.Send(Encoding.UTF8.GetBytes("{\"id\":0,\"module\":\"drs\",\"function\":\"tapeled_get\",\"params\":[]}"));
     }
 
     public void setTouch(List<TouchCommand> touchCommands)
@@ -25,7 +25,7 @@ public partial class GameConnection : Node
         if (touchCommands.Count == 0)
             return;
 
-        if (wsPeer.GetReadyState() == WebSocketPeer.State.Open)
+        if (_wsPeer.GetReadyState() == WebSocketPeer.State.Open)
         {
             string touchCommandString = "{\"id\":1,\"module\":\"drs\",\"function\":\"touch_set\",\"params\":[";
             foreach (var touchCommand in touchCommands)
@@ -34,7 +34,7 @@ public partial class GameConnection : Node
             }
             touchCommandString = touchCommandString.Remove(touchCommandString.Length - 1);
             touchCommandString += "]}";
-            wsPeer.Send(Encoding.UTF8.GetBytes(touchCommandString));
+            _wsPeer.Send(Encoding.UTF8.GetBytes(touchCommandString));
         }
     }
 
@@ -42,18 +42,18 @@ public partial class GameConnection : Node
     public override void _Ready()
     {
         GD.Print("Connecting WebSocket...");
-        wsPeer.ConnectToUrl(_websocket_url);
-        wsPeer.EncodeBufferMaxSize = 16 * 1024 * 1024;
-        wsPeer.InboundBufferSize = 16 * 1024 * 1024;
-        wsPeer.OutboundBufferSize = 16 * 1024 * 1024;
+        _wsPeer.ConnectToUrl(_websocket_url); //this shit takes so goddamn long to connect, and I CANNOT FATHOM WHY
+        _wsPeer.EncodeBufferMaxSize = 16 * 1024 * 1024; //give the buffer sizes a generous increase. it's a lot of data
+        _wsPeer.InboundBufferSize = 16 * 1024 * 1024;
+        _wsPeer.OutboundBufferSize = 16 * 1024 * 1024;
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
         lightingGetTimer += delta;
-        wsPeer.Poll();
-        var state = wsPeer.GetReadyState();
+        _wsPeer.Poll();
+        var state = _wsPeer.GetReadyState();
         switch (state)
         {
             case WebSocketPeer.State.Open:
@@ -63,13 +63,13 @@ public partial class GameConnection : Node
                     lightingGetTimer = 0;
                 }
 
-                for (int i = 0; i < wsPeer.GetAvailablePacketCount(); i++)
+                for (int i = 0; i < _wsPeer.GetAvailablePacketCount(); i++)
                 {
-                    string packetText = Encoding.UTF8.GetString(wsPeer.GetPacket());
-                    if (packetText.Contains("id"))
+                    string packetText = Encoding.UTF8.GetString(_wsPeer.GetPacket());
+                    if (packetText.Contains("id")) //questionable way to check if the message is valid
                     {
                         var dict = Json.ParseString(packetText).AsGodotDictionary();
-                        if (dict.ContainsKey("data") && dict["id"].AsInt32() == 0)
+                        if (dict.ContainsKey("data") && dict["id"].AsInt32() == 0) //Only the lighting data responses will have an ID of 0
                         {
                             int[] ledData = dict["data"].AsGodotArray()[0].AsInt32Array();
                             //The LED data is in the format of [r, g, b, r, g, b, ...]
@@ -84,8 +84,8 @@ public partial class GameConnection : Node
                 break;
             case WebSocketPeer.State.Closed:
                 GD.Print("WebSocket closed.");
-                var code = wsPeer.GetCloseCode();
-                var reason = wsPeer.GetCloseReason();
+                var code = _wsPeer.GetCloseCode();
+                var reason = _wsPeer.GetCloseReason();
                 GD.Print("WebSocket closed with code: %d, reason %s. Clean: %s", code, reason, code != -1);
 
                 SetProcess(false);
