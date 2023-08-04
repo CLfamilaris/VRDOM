@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://bn06u52d2m00s"]
+
+[ext_resource type="Script" path="res://scripts/SensorTrigger.cs" id="1_aibvx"]
+[ext_resource type="Shape3D" uid="uid://rd2eoar5f4gj" path="res://controller_collisionshape.tres" id="2_vuma2"]
+[ext_resource type="BoxMesh" uid="uid://c86k0m3ggdn76" path="res://controller.tres" id="3_njpfj"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_a5ph8"]
+size = Vector3(0.04, 0.015, 0.05)
+
+[node name="Virtual Foot" type="Area3D"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_aibvx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = ExtResource("2_vuma2")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+collision_mask = 4
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = ExtResource("3_njpfj")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0574117, 0)
+mesh = SubResource("BoxMesh_a5ph8")
+skeleton = NodePath("../..")

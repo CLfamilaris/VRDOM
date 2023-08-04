@@ -15,6 +15,10 @@ run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.1", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[audio]
+
+driver/driver="Dummy"
+
 [dotnet]
 
 project/assembly_name="VRDOM"
@@ -22,4 +26,5 @@ project/assembly_name="VRDOM"
 [xr]
 
 openxr/enabled=true
+openxr/default_action_map="res://xr_action_map.tres"
 shaders/enabled=true

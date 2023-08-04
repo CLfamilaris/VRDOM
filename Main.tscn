@@ -1,14 +1,13 @@
-[gd_scene load_steps=20 format=3 uid="uid://bq81xxba71cxw"]
+[gd_scene load_steps=18 format=3 uid="uid://bq81xxba71cxw"]
 
 [ext_resource type="Script" path="res://scripts/RootInit.cs" id="1_i51wy"]
-[ext_resource type="BoxMesh" uid="uid://c86k0m3ggdn76" path="res://controller.tres" id="2_d3qf6"]
 [ext_resource type="Shader" path="res://shaders/ColorSwap.gdshader" id="2_xru62"]
 [ext_resource type="Script" path="res://scripts/FootSensor.cs" id="3_6061f"]
-[ext_resource type="Script" path="res://scripts/SensorTrigger.cs" id="4_thw0t"]
 [ext_resource type="Shader" path="res://shaders/FootSensor.gdshader" id="4_xuw0l"]
 [ext_resource type="Script" path="res://scripts/GameConnection.cs" id="5_44hhi"]
-[ext_resource type="Shape3D" uid="uid://rd2eoar5f4gj" path="res://controller_collisionshape.tres" id="5_py4o4"]
+[ext_resource type="PackedScene" uid="uid://bn06u52d2m00s" path="res://virtual_foot.tscn" id="6_ss0nc"]
 [ext_resource type="Script" path="res://scripts/DisplayCapture.cs" id="7_ffs0h"]
+[ext_resource type="Script" path="res://scripts/ActionHandler.cs" id="8_a7ujv"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_j2hdc"]
 size = Vector2(1.77, 1)
@@ -31,9 +30,6 @@ shader_parameter/led_data = null
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_r3gxn"]
 size = Vector3(1.3, 0.08, 1.7)
-
-[sub_resource type="BoxMesh" id="BoxMesh_a5ph8"]
-size = Vector3(0.04, 0.045, 0.05)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_cxmum"]
 sky_top_color = Color(0.141176, 0.454902, 0.764706, 1)
@@ -82,7 +78,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.64, 0, -0.824933)
 [node name="MaxMarker" type="Marker3D" parent="XROrigin3D/Foot Sensor Pad/Sensor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.640241, 0, 0.825155)
 
-[node name="CollisionPolygon3D" type="CollisionShape3D" parent="XROrigin3D/Foot Sensor Pad/Sensor"]
+[node name="TouchableArea" type="CollisionShape3D" parent="XROrigin3D/Foot Sensor Pad/Sensor"]
 shape = SubResource("BoxShape3D_r3gxn")
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
@@ -92,46 +88,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
 tracker = &"left_hand"
 
-[node name="Sensor" type="Area3D" parent="XROrigin3D/LeftHand"]
-collision_layer = 2
-collision_mask = 2
-script = ExtResource("4_thw0t")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/LeftHand/Sensor"]
-shape = ExtResource("5_py4o4")
-
-[node name="RayCast3D" type="RayCast3D" parent="XROrigin3D/LeftHand/Sensor"]
-collision_mask = 4
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/LeftHand"]
-mesh = ExtResource("2_d3qf6")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="XROrigin3D/LeftHand"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0740553, 0)
-mesh = SubResource("BoxMesh_a5ph8")
+[node name="Virtual Foot" parent="XROrigin3D/LeftHand" instance=ExtResource("6_ss0nc")]
 
 [node name="RightHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
 tracker = &"right_hand"
 
-[node name="Sensor" type="Area3D" parent="XROrigin3D/RightHand"]
-collision_layer = 2
-collision_mask = 2
-script = ExtResource("4_thw0t")
+[node name="Virtual Foot" parent="XROrigin3D/RightHand" instance=ExtResource("6_ss0nc")]
 sensorId = 1
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/RightHand/Sensor"]
-shape = ExtResource("5_py4o4")
-
-[node name="RayCast3D" type="RayCast3D" parent="XROrigin3D/RightHand/Sensor"]
-collision_mask = 4
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/RightHand"]
-mesh = ExtResource("2_d3qf6")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="XROrigin3D/RightHand"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0740553, 0)
-mesh = SubResource("BoxMesh_a5ph8")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.445432, 0.895316, 0, -0.895316, 0.445432, 0, 5.43573, -0.011737)
@@ -142,3 +106,11 @@ environment = SubResource("Environment_jj1ls")
 [node name="Game Connection" type="Node" parent="." node_paths=PackedStringArray("_footSensor")]
 script = ExtResource("5_44hhi")
 _footSensor = NodePath("../XROrigin3D/Foot Sensor Pad")
+
+[node name="Action Handler" type="Node" parent="." node_paths=PackedStringArray("_leftFoot", "_rightFoot")]
+script = ExtResource("8_a7ujv")
+_leftFoot = NodePath("../XROrigin3D/LeftHand/Virtual Foot")
+_rightFoot = NodePath("../XROrigin3D/RightHand/Virtual Foot")
+
+[connection signal="button_pressed" from="XROrigin3D/LeftHand" to="Action Handler" method="OnXRButtonPress"]
+[connection signal="button_pressed" from="XROrigin3D/RightHand" to="Action Handler" method="OnXRButtonPress"]

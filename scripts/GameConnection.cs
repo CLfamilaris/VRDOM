@@ -14,13 +14,13 @@ public partial class GameConnection : Node
     readonly double lightingGetInterval = 0.0166;
     double lightingGetTimer = 0;
 
-    public void getLighting()
+    public void GetLighting()
     {
         if (_wsPeer.GetReadyState() == WebSocketPeer.State.Open)
             _wsPeer.Send(Encoding.UTF8.GetBytes("{\"id\":0,\"module\":\"drs\",\"function\":\"tapeled_get\",\"params\":[]}"));
     }
 
-    public void setTouch(List<TouchCommand> touchCommands)
+    public void SetTouch(List<TouchCommand> touchCommands)
     {
         if (touchCommands.Count == 0)
             return;
@@ -59,7 +59,7 @@ public partial class GameConnection : Node
             case WebSocketPeer.State.Open:
                 if (lightingGetTimer >= lightingGetInterval)
                 {
-                    getLighting();
+                    GetLighting();
                     lightingGetTimer = 0;
                 }
 

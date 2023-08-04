@@ -56,7 +56,7 @@ public partial class FootSensor : CsgMesh3D
                 touchCommands.Add(new TouchCommand(pair.Key, (int)TouchEvents.TOUCH_UP, new Vector2(0, 0), _defaultTouchSize));
             }
         }
-        _gameConnection.setTouch(touchCommands);
+        _gameConnection.SetTouch(touchCommands);
     }
 
     //Turns the world position into X and Y values from 0 to 1 on the pad that we can use for Spice

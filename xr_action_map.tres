@@ -1,0 +1,44 @@
+[gd_resource type="OpenXRActionMap" load_steps=9 format=3 uid="uid://dj5lrsrjr7l7s"]
+
+[sub_resource type="OpenXRAction" id="OpenXRAction_tgww6"]
+resource_name = "default_pose"
+localized_name = "Default pose"
+action_type = 3
+toplevel_paths = PackedStringArray("/user/hand/left", "/user/hand/right", "/user/vive_tracker_htcx/role/left_foot", "/user/vive_tracker_htcx/role/right_foot", "/user/vive_tracker_htcx/role/left_shoulder", "/user/vive_tracker_htcx/role/right_shoulder", "/user/vive_tracker_htcx/role/left_elbow", "/user/vive_tracker_htcx/role/right_elbow", "/user/vive_tracker_htcx/role/left_knee", "/user/vive_tracker_htcx/role/right_knee", "/user/vive_tracker_htcx/role/waist", "/user/vive_tracker_htcx/role/chest", "/user/vive_tracker_htcx/role/camera", "/user/vive_tracker_htcx/role/keyboard")
+
+[sub_resource type="OpenXRAction" id="OpenXRAction_8s7vw"]
+resource_name = "haptic"
+localized_name = "Haptic"
+action_type = 4
+toplevel_paths = PackedStringArray("/user/hand/left", "/user/hand/right", "/user/vive_tracker_htcx/role/left_foot", "/user/vive_tracker_htcx/role/right_foot", "/user/vive_tracker_htcx/role/left_shoulder", "/user/vive_tracker_htcx/role/right_shoulder", "/user/vive_tracker_htcx/role/left_elbow", "/user/vive_tracker_htcx/role/right_elbow", "/user/vive_tracker_htcx/role/left_knee", "/user/vive_tracker_htcx/role/right_knee", "/user/vive_tracker_htcx/role/waist", "/user/vive_tracker_htcx/role/chest", "/user/vive_tracker_htcx/role/camera", "/user/vive_tracker_htcx/role/keyboard")
+
+[sub_resource type="OpenXRAction" id="OpenXRAction_m3s11"]
+resource_name = "recalibrate"
+localized_name = "Recalibrate feet"
+action_type = 0
+toplevel_paths = PackedStringArray("/user/hand/left")
+
+[sub_resource type="OpenXRActionSet" id="OpenXRActionSet_5gwpn"]
+resource_name = "vrdom"
+localized_name = "VRDOM"
+actions = [SubResource("OpenXRAction_tgww6"), SubResource("OpenXRAction_8s7vw"), SubResource("OpenXRAction_m3s11")]
+
+[sub_resource type="OpenXRIPBinding" id="OpenXRIPBinding_7fsr8"]
+action = SubResource("OpenXRAction_tgww6")
+paths = PackedStringArray("/user/hand/left/input/aim/pose", "/user/hand/right/input/aim/pose")
+
+[sub_resource type="OpenXRIPBinding" id="OpenXRIPBinding_mpmsu"]
+action = SubResource("OpenXRAction_8s7vw")
+paths = PackedStringArray("/user/hand/left/output/haptic", "/user/hand/right/output/haptic")
+
+[sub_resource type="OpenXRIPBinding" id="OpenXRIPBinding_idjss"]
+action = SubResource("OpenXRAction_m3s11")
+paths = PackedStringArray("/user/hand/left/input/thumbstick/click")
+
+[sub_resource type="OpenXRInteractionProfile" id="OpenXRInteractionProfile_pkpee"]
+interaction_profile_path = "/interaction_profiles/oculus/touch_controller"
+bindings = [SubResource("OpenXRIPBinding_7fsr8"), SubResource("OpenXRIPBinding_mpmsu"), SubResource("OpenXRIPBinding_idjss")]
+
+[resource]
+action_sets = [SubResource("OpenXRActionSet_5gwpn")]
+interaction_profiles = [SubResource("OpenXRInteractionProfile_pkpee")]
