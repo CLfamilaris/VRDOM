@@ -7,15 +7,17 @@
 [sub_resource type="BoxMesh" id="BoxMesh_a5ph8"]
 size = Vector3(0.04, 0.015, 0.05)
 
-[node name="Virtual Foot" type="Area3D"]
+[node name="Virtual Foot" type="Area3D" node_paths=PackedStringArray("rayCast")]
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("1_aibvx")
+rayCast = NodePath("RayCast3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = ExtResource("2_vuma2")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0377305, 0)
 collision_mask = 4
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

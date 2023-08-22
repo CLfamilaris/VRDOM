@@ -90,12 +90,50 @@ tracker = &"left_hand"
 
 [node name="Virtual Foot" parent="XROrigin3D/LeftHand" instance=ExtResource("6_ss0nc")]
 
+[node name="Label" type="Label3D" parent="XROrigin3D/LeftHand/Virtual Foot"]
+transform = Transform3D(0.08, 0, 0, 0, -3.49691e-09, 0.08, 0, -0.08, -3.49691e-09, 0, 0.052, 0)
+text = "Hand
+L"
+font_size = 64
+
 [node name="RightHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
 tracker = &"right_hand"
 
 [node name="Virtual Foot" parent="XROrigin3D/RightHand" instance=ExtResource("6_ss0nc")]
 sensorId = 1
+
+[node name="Label" type="Label3D" parent="XROrigin3D/RightHand/Virtual Foot"]
+transform = Transform3D(0.08, 0, 0, 0, -3.49691e-09, 0.08, 0, -0.08, -3.49691e-09, 0, 0.052, 0)
+text = "Hand
+R"
+font_size = 64
+
+[node name="LeftFoot" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0, -1)
+tracker = &"/user/vive_tracker_htcx/role/left_foot"
+
+[node name="Virtual Foot" parent="XROrigin3D/LeftFoot" instance=ExtResource("6_ss0nc")]
+sensorId = 2
+
+[node name="Label" type="Label3D" parent="XROrigin3D/LeftFoot/Virtual Foot"]
+transform = Transform3D(0.08, 0, 0, 0, -3.49691e-09, 0.08, 0, -0.08, -3.49691e-09, 0, 0.052, 0)
+text = "Foot
+L"
+font_size = 64
+
+[node name="RightFoot" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, -1)
+tracker = &"/user/vive_tracker_htcx/role/right_foot"
+
+[node name="Virtual Foot" parent="XROrigin3D/RightFoot" instance=ExtResource("6_ss0nc")]
+sensorId = 3
+
+[node name="Label" type="Label3D" parent="XROrigin3D/RightFoot/Virtual Foot"]
+transform = Transform3D(0.08, 0, 0, 0, -3.49691e-09, 0.08, 0, -0.08, -3.49691e-09, 0, 0.052, 0)
+text = "Foot
+R"
+font_size = 64
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.445432, 0.895316, 0, -0.895316, 0.445432, 0, 5.43573, -0.011737)
@@ -107,10 +145,10 @@ environment = SubResource("Environment_jj1ls")
 script = ExtResource("5_44hhi")
 _footSensor = NodePath("../XROrigin3D/Foot Sensor Pad")
 
-[node name="Action Handler" type="Node" parent="." node_paths=PackedStringArray("_leftFoot", "_rightFoot")]
+[node name="Action Handler" type="Node" parent="." node_paths=PackedStringArray("_leftHand", "_rightHand")]
 script = ExtResource("8_a7ujv")
-_leftFoot = NodePath("../XROrigin3D/LeftHand/Virtual Foot")
-_rightFoot = NodePath("../XROrigin3D/RightHand/Virtual Foot")
+_leftHand = NodePath("../XROrigin3D/LeftHand/Virtual Foot")
+_rightHand = NodePath("../XROrigin3D/RightHand/Virtual Foot")
 
 [connection signal="button_pressed" from="XROrigin3D/LeftHand" to="Action Handler" method="OnXRButtonPress"]
 [connection signal="button_pressed" from="XROrigin3D/RightHand" to="Action Handler" method="OnXRButtonPress"]

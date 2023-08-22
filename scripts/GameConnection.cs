@@ -34,6 +34,7 @@ public partial class GameConnection : Node
             }
             touchCommandString = touchCommandString.Remove(touchCommandString.Length - 1);
             touchCommandString += "]}";
+            GD.Print(touchCommandString);
             _wsPeer.Send(Encoding.UTF8.GetBytes(touchCommandString));
         }
     }

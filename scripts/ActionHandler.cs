@@ -4,9 +4,9 @@ using System;
 public partial class ActionHandler : Node
 {
 	[Export]
-	private Node3D _leftFoot;
+	private Node3D _leftHand;
 	[Export]
-	private Node3D _rightFoot;
+	private Node3D _rightHand;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -29,12 +29,12 @@ public partial class ActionHandler : Node
 
 	private void Recalibrate()
 	{
-		GD.Print("Recalibrating feet");
-		const float defaultFootHeight = 0.075f;
-		_leftFoot.GlobalRotation = Vector3.Zero;
-		_rightFoot.GlobalRotation = Vector3.Zero;
+		GD.Print("Recalibrating hands");
+		const float defaultFootHeight = 0.038f;
+		_leftHand.GlobalRotation = Vector3.Zero;
+		_rightHand.GlobalRotation = Vector3.Zero;
 
-		_leftFoot.GlobalPosition = new Vector3(_leftFoot.GlobalPosition.X, defaultFootHeight, _leftFoot.GlobalPosition.Z);
-		_rightFoot.GlobalPosition = new Vector3(_rightFoot.GlobalPosition.X, defaultFootHeight, _rightFoot.GlobalPosition.Z);
+		_leftHand.GlobalPosition = new Vector3(_leftHand.GlobalPosition.X, defaultFootHeight, _leftHand.GlobalPosition.Z);
+		_rightHand.GlobalPosition = new Vector3(_rightHand.GlobalPosition.X, defaultFootHeight, _rightHand.GlobalPosition.Z);
 	}
 }
