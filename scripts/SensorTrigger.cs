@@ -15,6 +15,6 @@ public partial class SensorTrigger : Area3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        rayCast.Rotation = Vector3.Zero;
+        rayCast.GlobalRotation = Vector3.Zero;
     }
 }

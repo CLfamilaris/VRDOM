@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using VRDOM;
 
@@ -10,6 +11,7 @@ public partial class GameConnection : Node
     [Export]
     private FootSensor _footSensor;
 
+    private CultureInfo formatLocale = new("en-US");
     private WebSocketPeer _wsPeer = new();
     readonly double lightingGetInterval = 0.0166;
     double lightingGetTimer = 0;
@@ -30,11 +32,11 @@ public partial class GameConnection : Node
             string touchCommandString = "{\"id\":1,\"module\":\"drs\",\"function\":\"touch_set\",\"params\":[";
             foreach (var touchCommand in touchCommands)
             {
-                touchCommandString += "[" + touchCommand.touchEvent + "," + touchCommand.sensorId + "," + touchCommand.touchPosition.X.ToString("0.0000") + "," + touchCommand.touchPosition.Y.ToString("0.0000") + "," + touchCommand.touchSize.X + "," + touchCommand.touchSize.Y + "],";
+                // honestly what did i smoke when i wrote this, i should REALLY go back and change this?? maybe?
+                touchCommandString += "[" + touchCommand.touchEvent + "," + touchCommand.sensorId + "," + touchCommand.touchPosition.X.ToString("0.0000", formatLocale) + "," + touchCommand.touchPosition.Y.ToString("0.0000", formatLocale) + "," + touchCommand.touchSize.X.ToString("0.0000", formatLocale) + "," + touchCommand.touchSize.Y.ToString("0.0000", formatLocale) + "],";
             }
             touchCommandString = touchCommandString.Remove(touchCommandString.Length - 1);
             touchCommandString += "]}";
-            GD.Print(touchCommandString);
             _wsPeer.Send(Encoding.UTF8.GetBytes(touchCommandString));
         }
     }
